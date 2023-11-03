@@ -1,44 +1,29 @@
 import { User } from "../../model/user"
-import Base64 from "../../plugin/base64"
-
 export const userController = async (event) => {
   switch (event.httpMethod) {
-    case "POST":
-      if (event.path === ('/api/handle/auth/register')) return await register(event)
+    case "GET":
+      if (event.path === ('/api/handle/user/find-one')) return await fetchOne(event)
       break
     default:
       throw new Error(`Unsupported method "${event.httpMethod}"`)
   }
 }
 
-
-const register = async (event) => {
+const fetchOne = async (event) => {
   try {
-    let { username, email, password } = JSON.parse(event.body) || {}
-    if (!username || !email || !password)
-      throw Error("Thiếu thông tin")
-    const checkUsername = await User.findOne({
-      email,
-    });
-    if (checkUsername) {
-      throw Error("Tài khoản đã tồn tại!")
-    } else {
-      const decodePassword = Base64.decode(password);
-      const user = {
-        email,
-        username,
-        password: decodePassword,
-      };
-      await User.create(user);
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          success: true
-        })
-
-      }
+    const id = event.queryStringParameters.id
+    if (!id)
+      throw Error("Thiếu Id")
+    const user = await User.findById(id);
+    if (!user) throw Error("User không tồn tại")
+    delete user._doc.password
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        user
+      })
     }
   } catch (error) {
     throw error
   }
-};
+}
