@@ -5,9 +5,9 @@ import { Token } from "../../plugin/token"
 export const authController = async (event) => {
   switch (event.httpMethod) {
     case "POST":
-      if (event.path === ('/api/handle/auth/register')) return await register(event)
-      if (event.path === ('/api/handle/auth/signin')) return await login(event)
-      if (event.path === ('/api/handle/auth/refresh')) return await loginWithToken(event)
+      if (event.path === ('/api/auth/register')) return await register(event)
+      if (event.path === ('/api/auth/signin')) return await login(event)
+      if (event.path === ('/api/auth/refresh')) return await loginWithToken(event)
       break
     default:
       throw new Error(`Unsupported method "${event.httpMethod}"`)

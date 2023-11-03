@@ -2,7 +2,7 @@ import { User } from "../../model/user"
 export const userController = async (event) => {
   switch (event.httpMethod) {
     case "GET":
-      if (event.path === ('/api/handle/user/find-one')) return await fetchOne(event)
+      if (event.path === ('/api/user/find-one')) return await fetchOne(event)
       break
     default:
       throw new Error(`Unsupported method "${event.httpMethod}"`)

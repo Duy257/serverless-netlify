@@ -2,8 +2,8 @@
 import jwt from "jsonwebtoken";
 import { key_access } from "../plugin/config";
 
-export const auth = (req, res, next) => {
-  let authorization = req.headers.authorization;
+export const auth = (event) => {
+  let authorization = event.headers.authorization;
   if (authorization) {
     let accessToken = authorization.split(" ")[1];
     if (!accessToken) {
@@ -11,19 +11,13 @@ export const auth = (req, res, next) => {
     } else {
       jwt.verify(accessToken, key_access, (err, data) => {
         if (err) {
-          res.status(401).json({
-            error: err.message,
-            message: "You are anonymous2",
-          });
+          throw new Error(err.message);
         } else {
-          req.decoded = data;
-          next();
+          return
         }
       });
     }
   } else {
-    res.status(401).json({
-      message: "You are anonymous3",
-    });
+    throw Error("You are anonymous3")
   }
 };
