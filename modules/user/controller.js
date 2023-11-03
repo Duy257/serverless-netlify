@@ -4,7 +4,7 @@ import Base64 from "../../plugin/base64"
 export const userController = async (event) => {
   switch (event.httpMethod) {
     case "POST":
-      if (event.path.includes('/register')) return await register(event)
+      if (event.path === ('/api/handle/auth/register')) return await register(event)
       break
     default:
       throw new Error(`Unsupported method "${event.httpMethod}"`)
