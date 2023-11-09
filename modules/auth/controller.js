@@ -1,5 +1,6 @@
 import { User } from "../../model/user"
 import Base64 from "../../plugin/base64"
+import { parseStringDataReturn } from "../../plugin/ultis"
 import { Token } from "../../plugin/token"
 
 export const authController = async (event) => {
@@ -33,12 +34,12 @@ const register = async (event) => {
         password: decodePassword,
       };
       await User.create(user);
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
+      return parseStringDataReturn({
+        code: 200,
+        data: {
           success: true
-        })
-      }
+        }
+      })
     }
   } catch (error) {
     throw error
@@ -62,13 +63,13 @@ const login = async (event) => {
         idUser: user._id,
       };
       const generateToken = Token.sign({ payload });
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
+      return parseStringDataReturn({
+        code: 200,
+        data: {
           ...generateToken,
           idUser: user._id,
-        })
-      }
+        }
+      })
     } else {
       throw Error("Tài khoản hoặc mật khẩu sai")
     }
@@ -81,12 +82,12 @@ const loginWithToken = async (event) => {
     if (!refreshToken)
       throw Error("Thiếu thông tin")
     const generateToken = Token.refresh({ refreshToken });
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
+    return parseStringDataReturn({
+      code: 200,
+      data: {
         ...generateToken,
-      })
-    }
+      }
+    })
   } catch (error) {
     throw error;
   }

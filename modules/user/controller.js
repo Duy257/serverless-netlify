@@ -17,12 +17,12 @@ const fetchOne = async (event) => {
     const user = await User.findById(id);
     if (!user) throw Error("User không tồn tại")
     delete user._doc.password
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
+    return parseStringDataReturn({
+      code: 200,
+      data: {
         user
-      })
-    }
+      }
+    })
   } catch (error) {
     throw error
   }
